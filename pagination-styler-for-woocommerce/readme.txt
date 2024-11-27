@@ -4,8 +4,8 @@ Contributors: berocket, dholovnia
 Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&utm_campaign=pagination
 Tags: custom panitation, pagination design, paginator, custom woocommerce pagination, woocommerce pagination, style pagination, custom design for pagination, design pagination, custom panitation style, woocommerce custom pagination layout, berocket, berocket pagination styler for woocommerce
 Requires at least: 4.0
-Tested up to: 6.6
-Stable tag: 3.5.9
+Tested up to: 6.7
+Stable tag: 3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,10 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.6 =
+* Enhancement - Compatibility version: Wordpress 6.7 and WooCommerce 9.4
+* Fix - Translation init errors with WordPress 6.7
 
 = 3.5.9 =
 * Enhancement - Compatibility version: WooCommerce 9.3
