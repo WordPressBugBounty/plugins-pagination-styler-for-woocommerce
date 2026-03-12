@@ -13,6 +13,13 @@ class BeRocket_Pagination extends BeRocket_Framework {
     public static $settings_name = 'br-pagination-options';
     protected $plugin_version_capability = 15;
     protected static $instance;
+    public $import_export = array(
+        'javascript_settings' => array(
+            'page_load' => array(
+                'export_type' => 'remove'
+            )
+        )
+    );
     protected $disable_settings_for_admin = array(
         array('javascript_settings', 'page_load'),
     );
@@ -34,6 +41,10 @@ class BeRocket_Pagination extends BeRocket_Framework {
             )
         ),
     );
+    protected $global_settings = array(
+        'fontawesome_frontend_disable',
+        'fontawesome_frontend_version'
+    );
     function __construct () {
         $this->info = array(
             'id'          => 6,
@@ -52,107 +63,248 @@ class BeRocket_Pagination extends BeRocket_Framework {
             'plugin_file' => BeRocket_pagination_file,
             'plugin_dir'  => __DIR__,
         );
-        $this->defaults = array(
-            'general_settings'    => array(
-                'use_next_prev'                     => '1',
-                'pos_next_prev'                     => 'around_pagination',
-                'page_end_size'                     => '3',
-                'page_mid_size'                     => '3',
-                'use_dots'                          => '1',
+        $this->defaults = array (
+            'general_settings' => array (
+                'use_next_prev' => '1',
+                'pos_next_prev' => 'around_pagination',
+                'page_end_size' => '3',
+                'page_mid_size' => '3',
+                'use_dots' => '1',
             ),
-            'style_settings'      => array(
-                'style'                             => 'default',
-                'use_styles'                        => array(),
-                'buttons'                           => array(
-                    'prev'                              => array(),
-                    'next'                              => array(),
-                    'dots'                              => array(),
-                    'current'                           => array(),
-                    'other'                             => array(),
+            'style_settings' => array (
+                'style' => 'default',
+                'use_styles' => array (),
+                'buttons' => array (
+                    'prev' => array (
+                        'ul_li_a-span_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                            'padding-top' => '',
+                            'padding-bottom' => '',
+                            'padding-left' => '',
+                            'padding-right' => '',
+                        ),
+                        'ul_li_style' => array (
+                            'border-top-width' => '',
+                            'border-bottom-width' => '',
+                            'border-left-width' => '',
+                            'border-right-width' => '',
+                            'border-top-left-radius' => '',
+                            'border-top-right-radius' => '',
+                            'border-bottom-right-radius' => '',
+                            'border-bottom-left-radius' => '',
+                            'margin-top' => '',
+                            'margin-bottom' => '',
+                            'margin-left' => '',
+                            'margin-right' => '',
+                            'border-color' => '',
+                        ),
+                        'ul_li_a-span_hover_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                        ),
+                        'ul_li_hover_style' => array (
+                            'border-color' => '',
+                        ),
+                    ),
+                    'next' => array (
+                        'ul_li_a-span_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                            'padding-top' => '',
+                            'padding-bottom' => '',
+                            'padding-left' => '',
+                            'padding-right' => '',
+                        ),
+                        'ul_li_style' => array (
+                            'border-top-width' => '',
+                            'border-bottom-width' => '',
+                            'border-left-width' => '',
+                            'border-right-width' => '',
+                            'border-top-left-radius' => '',
+                            'border-top-right-radius' => '',
+                            'border-bottom-right-radius' => '',
+                            'border-bottom-left-radius' => '',
+                            'margin-top' => '',
+                            'margin-bottom' => '',
+                            'margin-left' => '',
+                            'margin-right' => '',
+                            'border-color' => '',
+                        ),
+                        'ul_li_a-span_hover_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                        ),
+                        'ul_li_hover_style' => array (
+                            'border-color' => '',
+                        ),
+                    ),
+                    'dots' => array (
+                        'ul_li_a-span_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                            'padding-top' => '',
+                            'padding-bottom' => '',
+                            'padding-left' => '',
+                            'padding-right' => '',
+                        ),
+                        'ul_li_style' => array (
+                            'border-top-width' => '',
+                            'border-bottom-width' => '',
+                            'border-left-width' => '',
+                            'border-right-width' => '',
+                            'border-top-left-radius' => '',
+                            'border-top-right-radius' => '',
+                            'border-bottom-right-radius' => '',
+                            'border-bottom-left-radius' => '',
+                            'margin-top' => '',
+                            'margin-bottom' => '',
+                            'margin-left' => '',
+                            'margin-right' => '',
+                            'border-color' => '',
+                        ),
+                    ),
+                    'current' => array (
+                        'ul_li_a-span_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                            'padding-top' => '',
+                            'padding-bottom' => '',
+                            'padding-left' => '',
+                            'padding-right' => '',
+                        ),
+                        'ul_li_style' => array (
+                            'border-top-width' => '',
+                            'border-bottom-width' => '',
+                            'border-left-width' => '',
+                            'border-right-width' => '',
+                            'border-top-left-radius' => '',
+                            'border-top-right-radius' => '',
+                            'border-bottom-right-radius' => '',
+                            'border-bottom-left-radius' => '',
+                            'margin-top' => '',
+                            'margin-bottom' => '',
+                            'margin-left' => '',
+                            'margin-right' => '',
+                            'border-color' => '',
+                        ),
+                    ),
+                    'other' => array (
+                        'ul_li_a-span_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                            'padding-top' => '',
+                            'padding-bottom' => '',
+                            'padding-left' => '',
+                            'padding-right' => '',
+                        ),
+                        'ul_li_style' => array (
+                            'border-top-width' => '',
+                            'border-bottom-width' => '',
+                            'border-left-width' => '',
+                            'border-right-width' => '',
+                            'border-top-left-radius' => '',
+                            'border-top-right-radius' => '',
+                            'border-bottom-right-radius' => '',
+                            'border-bottom-left-radius' => '',
+                            'margin-top' => '',
+                            'margin-bottom' => '',
+                            'margin-left' => '',
+                            'margin-right' => '',
+                            'border-color' => '',
+                        ),
+                        'ul_li_a-span_hover_style' => array (
+                            'color' => '',
+                            'background-color' => '',
+                        ),
+                        'ul_li_hover_style' => array (
+                            'border-color' => '',
+                        ),
+                    ),
                 ),
-                'pagination_pos'                    => 'center',
-                'default_show'                      => array(
-                    'after_products'                    => '1',
-                    'before_products'                   => '',
+                'pagination_pos' => 'center',
+                'default_show' => array (
+                    'after_products' => '1',
+                    'before_products' => '',
                 ),
-                'fixed_position'                    => array(
-                    'top'                               => '',
-                    'bottom'                            => '0',
-                    'left'                              => '',
-                    'right'                             => '',
+                'fixed_position' => array (
+                    'top' => '',
+                    'bottom' => '0',
+                    'left' => '',
+                    'right' => '',
                 ),
-                'buffer_top'                        => '700',
-                'bottom_position'                   => '10',
-                'ul_style'                          => array(
-                    'background-color'                  => '',
-                    'border-color'                      => 'd3ced2',
-                    'border-top-width'                  => '1',
-                    'border-bottom-width'               => '1',
-                    'border-left-width'                 => '1',
-                    'border-right-width'                => '0',
-                    'padding-top'                       => '0',
-                    'padding-bottom'                    => '0',
-                    'padding-left'                      => '0',
-                    'padding-right'                     => '0',
-                    'border-top-left-radius'            => '0',
-                    'border-top-right-radius'           => '0',
-                    'border-bottom-right-radius'        => '0',
-                    'border-bottom-left-radius'         => '0',
+                'buffer_top' => '700',
+                'bottom_position' => '10',
+                'ul_style' => array (
+                    'background-color' => '',
+                    'border-color' => '#d3ced2',
+                    'border-top-width' => '1',
+                    'border-bottom-width' => '1',
+                    'border-left-width' => '1',
+                    'border-right-width' => '0',
+                    'padding-top' => '0',
+                    'padding-bottom' => '0',
+                    'padding-left' => '0',
+                    'padding-right' => '0',
+                    'border-top-left-radius' => '0',
+                    'border-top-right-radius' => '0',
+                    'border-bottom-right-radius' => '0',
+                    'border-bottom-left-radius' => '0',
                 ),
-                'ul_li_style'                       => array(
-                    'border-color'                      => 'd3ced2',
-                    'border-top-width'                  => '0',
-                    'border-bottom-width'               => '0',
-                    'border-left-width'                 => '0',
-                    'border-right-width'                => '1',
-                    'border-top-left-radius'            => '0',
-                    'border-top-right-radius'           => '0',
-                    'border-bottom-right-radius'        => '0',
-                    'border-bottom-left-radius'         => '0',
-                    'margin-top'                        => '0',
-                    'margin-bottom'                     => '0',
-                    'margin-left'                       => '0',
-                    'margin-right'                      => '0',
-                    'float'                             => 'left',
+                'ul_li_style' => array (
+                    'border-color' => '#d3ced2',
+                    'border-top-width' => '0',
+                    'border-bottom-width' => '0',
+                    'border-left-width' => '0',
+                    'border-right-width' => '1',
+                    'border-top-left-radius' => '0',
+                    'border-top-right-radius' => '0',
+                    'border-bottom-right-radius' => '0',
+                    'border-bottom-left-radius' => '0',
+                    'margin-top' => '0',
+                    'margin-bottom' => '0',
+                    'margin-left' => '0',
+                    'margin-right' => '0',
+                    'float' => 'left',
                 ),
-                'ul_li_hover_style'                 => array(
-                    'border-color'                      => 'd3ced2',
+                'ul_li_hover_style' => array (
+                    'border-color' => '#d3ced2',
                 ),
-                'ul_li_a-span_style'                => array(
-                    'color'                             => '333',
-                    'background-color'                  => '',
-                    'padding-top'                       => '10',
-                    'padding-bottom'                    => '10',
-                    'padding-left'                      => '10',
-                    'padding-right'                     => '10',
+                'ul_li_a-span_style' => array (
+                    'color' => '#333',
+                    'background-color' => '',
+                    'padding-top' => '10',
+                    'padding-bottom' => '10',
+                    'padding-left' => '10',
+                    'padding-right' => '10',
                 ),
-                'ul_li_a-span_hover_style'          => array(
-                    'color'                             => '8a7e88',
-                    'background-color'                  => 'ebe9eb',
+                'ul_li_a-span_hover_style' => array (
+                    'color' => '#8a7e88',
+                    'background-color' => '#ebe9eb',
                 ),
             ),
-            'text_settings'       => array(
-                'dots_prev_icon'                    => 'fa-ellipsis-h',
-                'dots_prev_text'                    => '…',
-                'dots_next_icon'                    => 'fa-ellipsis-h',
-                'dots_next_text'                    => '…',
-                'prev_icon'                         => 'fa-angle-double-left',
-                'next_icon'                         => 'fa-angle-double-right',
-                'prev_text'                         => '«',
-                'next_text'                         => '»',
-                'current_page'                      => '%PAGE%',
-                'page'                              => '%PAGE%',
-                'first_page_icon'                   => '',
-                'first_page'                        => '1',
-                'last_page_icon'                    => '',
-                'last_page'                         => '%LAST%',
+            'text_settings' => array (
+                'dots_prev_icon' => 'fa-ellipsis-h',
+                'dots_prev_text' => '…',
+                'dots_next_icon' => 'fa-ellipsis-h',
+                'dots_next_text' => '…',
+                'prev_icon' => 'fa-angle-double-left',
+                'next_icon' => 'fa-angle-double-right',
+                'prev_text' => '«',
+                'next_text' => '»',
+                'current_page' => '%PAGE%',
+                'page' => '%PAGE%',
+                'first_page_icon' => '',
+                'first_page' => '1',
+                'last_page_icon' => '',
+                'last_page' => '%LAST%',
             ),
-            'javascript_settings' => array(
-                'page_load'                         => '',
-                'custom_css'                        => '',
+            'javascript_settings' => array (
+                'page_load' => '',
+                'custom_css' => '',
             ),
-            'fontawesome_frontend_disable'    => '',
-            'fontawesome_frontend_version'    => '',
+            'fontawesome_frontend_disable' => '',
+            'fontawesome_frontend_version' => 'fontawesome5',
         );
         $this->values = array(
             'settings_name' => 'br-pagination-options',
@@ -689,24 +841,6 @@ class BeRocket_Pagination extends BeRocket_Framework {
                 ),
             ),
             'Custom CSS/JavaScript' => array(
-                'global_font_awesome_disable' => array(
-                    "label"     => __( 'Disable Font Awesome', "pagination-styler-for-woocommerce" ),
-                    "type"      => "checkbox",
-                    "name"      => "fontawesome_frontend_disable",
-                    "value"     => '1',
-                    'label_for' => __('Don\'t load Font Awesome css files on site front end. Use it only if you don\'t use Font Awesome icons in widgets or your theme has Font Awesome.', 'pagination-styler-for-woocommerce'),
-                ),
-                'global_fontawesome_version' => array(
-                    "label"    => __( 'Font Awesome Version', "pagination-styler-for-woocommerce" ),
-                    "name"     => "fontawesome_frontend_version",
-                    "type"     => "selectbox",
-                    "options"  => array(
-                        array('value' => '', 'text' => __('Font Awesome 4', 'pagination-styler-for-woocommerce')),
-                        array('value' => 'fontawesome5', 'text' => __('Font Awesome 5', 'pagination-styler-for-woocommerce')),
-                    ),
-                    "value"    => '',
-                    "label_for" => __('Version of Font Awesome that will be used on front end. Please select version that you have in your theme', 'pagination-styler-for-woocommerce'),
-                ),
                 array(
                     "label"   => __("Custom CSS", 'pagination-styler-for-woocommerce'),
                     "name"    => array("javascript_settings", "custom_css"),
