@@ -5,7 +5,7 @@ Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&ut
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 4.0
 Tested up to: 6.9.4
-Stable tag: 3.6.1.4
+Stable tag: 3.6.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.6.1.5 =
+* Enhancement - Compatibility version: WooCommerce 10.7
+* Fix - Plugins notice mark on BeRocket element
 
 = 3.6.1.4 =
 * Enhancement - Compatibility version: Wordpress 6.9.4 and WooCommerce 10.6.2
