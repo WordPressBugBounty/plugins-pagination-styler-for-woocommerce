@@ -5,7 +5,7 @@ Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&ut
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 4.0
 Tested up to: 6.9.4
-Stable tag: 3.6.1.5
+Stable tag: 3.6.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,11 +14,6 @@ With Pagination Styler for WooCommerce You can customize pagination as You want 
 == Description ==
 
 With Pagination Styler for WooCommerce You can customize pagination as You want without code.
-
-= 🚀 Spring Premium Days is LIVE! =
-**Save 30%** on Pro features across BeRocket plugins. 
-*Boost your store performance and UX with our exclusive seasonal offer.*
-🌿 Improve your store today. [**Limited time offer!**](https://berocket.com/plugins/?utm_source=free_plugin&utm_medium=wporg&utm_campaign=spring_2026&utm_content=top_ad_cta&utm_term=pagination)
 
 = Features: =
 &#9989; Custom Pagination for WooCommerce
@@ -87,6 +82,9 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.6.1.6 =
+* Fix - PHP fatal error on plugin update when other BeRocket plugin installed
 
 = 3.6.1.5 =
 * Enhancement - Compatibility version: WooCommerce 10.7
