@@ -4,8 +4,8 @@ Contributors: berocket, dholovnia
 Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&utm_campaign=pagination
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 4.0
-Tested up to: 6.9.4
-Stable tag: 3.6.1.6
+Tested up to: 7.0
+Stable tag: 3.6.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,9 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.6.1.7 =
+* Enhancement - Compatibility version: Wordpress 7.0
 
 = 3.6.1.6 =
 * Fix - PHP fatal error on plugin update when other BeRocket plugin installed
