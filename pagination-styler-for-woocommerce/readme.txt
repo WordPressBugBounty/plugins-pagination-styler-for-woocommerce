@@ -4,8 +4,8 @@ Contributors: berocket, dholovnia
 Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&utm_campaign=pagination
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 5.0
-Tested up to: 7.0.1
-Stable tag: 3.6.2
+Tested up to: 7.0.4
+Stable tag: 3.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,10 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.6.3 =
+* Enhancement - Updated BeRocket framework.
+* Security - Hardened framework validation and output handling.
 
 = 3.6.2 =
 * Enhancement - Harden locked features validation
