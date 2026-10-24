@@ -65,12 +65,14 @@ class BeRocket_Pagination extends BeRocket_Framework {
             'plugin_dir'  => __DIR__,
         );
         $this->defaults = array (
+            'pagination_design' => 'manual',
             'general_settings' => array (
                 'use_next_prev' => '1',
                 'pos_next_prev' => 'around_pagination',
                 'page_end_size' => '3',
                 'page_mid_size' => '3',
                 'use_dots' => '1',
+                'show_page_summary' => '',
             ),
             'style_settings' => array (
                 'style' => 'default',
@@ -367,6 +369,9 @@ class BeRocket_Pagination extends BeRocket_Framework {
         $style_options = $options['style_settings'];
         wp_register_style( 'berocket_pagination_style', plugins_url( 'css/pagination.css', __FILE__ ), "", BeRocket_pagination_version );
         wp_enqueue_style( 'berocket_pagination_style' );
+        if ( 'manual' !== BeRocket_Pagination_Presets::selected( $options ) ) {
+            BeRocket_Pagination_Presets::enqueue();
+        }
         wp_enqueue_script( 'berocket_pagination_script', plugins_url( 'js/pagination_styler.js', __FILE__ ), array( 'jquery' ), BeRocket_pagination_version );
         remove_action('woocommerce_after_shop_loop', 'woocommerce_pagination', 10);
         if ( $style_options['style'] != 'default' || $style_options['default_show']['after_products'] ) {
@@ -383,6 +388,7 @@ class BeRocket_Pagination extends BeRocket_Framework {
         wp_enqueue_script( 'berocket_pagination_admin_script', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ) );
         wp_register_style( 'berocket_pagination_admin_style', plugins_url( 'css/admin.css', __FILE__ ), "", BeRocket_pagination_version );
         wp_enqueue_style( 'berocket_pagination_admin_style' );
+        BeRocket_Pagination_Presets::enqueue();
     }
     public function update_from_not_framework() {
         $update_option = false;
@@ -418,42 +424,44 @@ class BeRocket_Pagination extends BeRocket_Framework {
             echo 'text-align: '.$style_options['pagination_pos'].'!important;';
         }
         echo '}';
-        echo '.woocommerce-pagination.berocket_pagination ul{';
-        self::array_to_style ( $style_options['ul_style'] );
-        echo '}';
-        echo '.woocommerce-pagination.berocket_pagination ul li{';
-        self::array_to_style ( $style_options['ul_li_style'] );
-        echo '}';
-        echo '.woocommerce-pagination.berocket_pagination ul li:hover{';
-        self::array_to_style ( $style_options['ul_li_hover_style'] );
-        echo '}';
-        echo '.woocommerce-pagination.berocket_pagination ul li > a, .woocommerce-pagination.berocket_pagination ul li > span{';
-        self::array_to_style ( $style_options['ul_li_a-span_style'] );
-        echo '}';
-        echo '.woocommerce-pagination.berocket_pagination ul li > a:hover, .woocommerce-pagination.berocket_pagination ul li > span.current{';
-        self::array_to_style ( $style_options['ul_li_a-span_hover_style'] );
-        echo '}';
-        if( isset($style_options['use_styles']) && is_array($style_options['use_styles']) ) {
-            foreach($style_options['use_styles'] as $style_id) {
-                if( isset($style_options['buttons'][$style_id]['ul_li_style']) && is_array($style_options['buttons'][$style_id]['ul_li_style']) ) {
-                    echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.'{';
-                    self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_style'] );
-                    echo '}';
-                }
-                if( isset($style_options['buttons'][$style_id]['ul_li_hover_style']) && is_array($style_options['buttons'][$style_id]['ul_li_hover_style']) ) {
-                    echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.':hover{';
-                    self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_hover_style'] );
-                    echo '}';
-                }
-                if( isset($style_options['buttons'][$style_id]['ul_li_a-span_style']) && is_array($style_options['buttons'][$style_id]['ul_li_a-span_style']) ) {
-                    echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > a, .woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > span{';
-                    self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_a-span_style'] );
-                    echo '}';
-                }
-                if( isset($style_options['buttons'][$style_id]['ul_li_a-span_hover_style']) && is_array($style_options['buttons'][$style_id]['ul_li_a-span_hover_style']) ) {
-                    echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > a:hover, .woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > span.current{';
-                    self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_a-span_hover_style'] );
-                    echo '}';
+        if ( 'manual' === BeRocket_Pagination_Presets::selected( $options_global ) ) {
+            echo '.woocommerce-pagination.berocket_pagination ul{';
+            self::array_to_style ( $style_options['ul_style'] );
+            echo '}';
+            echo '.woocommerce-pagination.berocket_pagination ul li{';
+            self::array_to_style ( $style_options['ul_li_style'] );
+            echo '}';
+            echo '.woocommerce-pagination.berocket_pagination ul li:hover{';
+            self::array_to_style ( $style_options['ul_li_hover_style'] );
+            echo '}';
+            echo '.woocommerce-pagination.berocket_pagination ul li > a, .woocommerce-pagination.berocket_pagination ul li > span{';
+            self::array_to_style ( $style_options['ul_li_a-span_style'] );
+            echo '}';
+            echo '.woocommerce-pagination.berocket_pagination ul li > a:hover, .woocommerce-pagination.berocket_pagination ul li > span.current{';
+            self::array_to_style ( $style_options['ul_li_a-span_hover_style'] );
+            echo '}';
+            if( isset($style_options['use_styles']) && is_array($style_options['use_styles']) ) {
+                foreach($style_options['use_styles'] as $style_id) {
+                    if( isset($style_options['buttons'][$style_id]['ul_li_style']) && is_array($style_options['buttons'][$style_id]['ul_li_style']) ) {
+                        echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.'{';
+                        self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_style'] );
+                        echo '}';
+                    }
+                    if( isset($style_options['buttons'][$style_id]['ul_li_hover_style']) && is_array($style_options['buttons'][$style_id]['ul_li_hover_style']) ) {
+                        echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.':hover{';
+                        self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_hover_style'] );
+                        echo '}';
+                    }
+                    if( isset($style_options['buttons'][$style_id]['ul_li_a-span_style']) && is_array($style_options['buttons'][$style_id]['ul_li_a-span_style']) ) {
+                        echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > a, .woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > span{';
+                        self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_a-span_style'] );
+                        echo '}';
+                    }
+                    if( isset($style_options['buttons'][$style_id]['ul_li_a-span_hover_style']) && is_array($style_options['buttons'][$style_id]['ul_li_a-span_hover_style']) ) {
+                        echo '.woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > a:hover, .woocommerce-pagination.berocket_pagination ul li.'.$style_id.' > span.current{';
+                        self::array_to_style ( $style_options['buttons'][$style_id]['ul_li_a-span_hover_style'] );
+                        echo '}';
+                    }
                 }
             }
         }
@@ -511,44 +519,49 @@ class BeRocket_Pagination extends BeRocket_Framework {
         if ( $style_options['style'] == 'bottom' ) {
             ?>
             function bottom_style_set() {
-                var bottom_position = <?php echo $style_options['bottom_position']; ?>;
-                var $block = jQuery('.woocommerce-pagination.berocket_pagination');
-                var pagination_height = jQuery('.woocommerce-pagination.berocket_pagination ul').outerHeight(true);
-                var pagination_width = jQuery('.woocommerce-pagination.berocket_pagination ul').outerWidth(true);
-                var pagination_pos = '<?php echo $style_options['pagination_pos']; ?>';
-                if( pagination_pos == 'left' ) {
-                    var left_pos = 0;
-                } else if( pagination_pos == 'right' ) {
-                    var left_pos = $block.outerWidth(true) - pagination_width;
-                } else {
-                    var left_pos = ($block.outerWidth(true) - pagination_width) / 2;
-                }
-                var full_left_pos = left_pos + $block.offset().left;
-                $block.css('position', 'relative').width('initial').height(pagination_height);
-                
-                var bufferTop = <?php echo $style_options['buffer_top']; ?>;
-                var top = $block.offset().top;
-                var height = $block.innerHeight();
-                var padding_top = parseFloat($block.css('padding-top'));
-                var scrolled = jQuery(window).scrollTop() + jQuery(window).height();
-                
-                var first_top = bufferTop + padding_top;
-                var first_position = bufferTop - top - bottom_position - pagination_height;
-                
-                var second_top = top + height + bottom_position;
-                var second_position = bottom_position;
-                var left_position = jQuery('.woocommerce-pagination.berocket_pagination').offset().left;
-                var third_position = 0;
-                if ( scrolled < first_top ) {
-                    jQuery('.woocommerce-pagination.berocket_pagination ul').css( { 'position': 'absolute', 'top': first_position, 'bottom': '', 'left': left_pos } );
-                } else if ( scrolled < second_top ) {
-                    jQuery('.woocommerce-pagination.berocket_pagination ul').css( { 'position': 'fixed', 'bottom': second_position, 'top': '', 'left': full_left_pos } );
-                } else {
-                    jQuery('.woocommerce-pagination.berocket_pagination ul').css( { 'position': 'absolute', 'bottom': third_position, 'top': '', 'left': left_pos } );
-                }
+                jQuery('.woocommerce-pagination.berocket_pagination').each(function() {
+                    var bottom_position = <?php echo $style_options['bottom_position']; ?>;
+                    var $block = jQuery(this);
+                    var $pagination = $block.find('.br-pagination-content');
+                    if (!$pagination.length) { $pagination = $block.find('ul'); }
+                    if (!$block.length || !$pagination.length) { return; }
+                    var pagination_height = $pagination.outerHeight(true);
+                    var pagination_width = $pagination.outerWidth(true);
+                    var pagination_pos = '<?php echo $style_options['pagination_pos']; ?>';
+                    if( pagination_pos == 'left' ) {
+                        var left_pos = 0;
+                    } else if( pagination_pos == 'right' ) {
+                        var left_pos = $block.outerWidth(true) - pagination_width;
+                    } else {
+                        var left_pos = ($block.outerWidth(true) - pagination_width) / 2;
+                    }
+                    var full_left_pos = left_pos + $block.offset().left;
+                    $block.css('position', 'relative').width('initial').height(pagination_height);
+
+                    var bufferTop = <?php echo $style_options['buffer_top']; ?>;
+                    var top = $block.offset().top;
+                    var height = $block.innerHeight();
+                    var padding_top = parseFloat($block.css('padding-top'));
+                    var scrolled = jQuery(window).scrollTop() + jQuery(window).height();
+
+                    var first_top = bufferTop + padding_top;
+                    var first_position = bufferTop - top - bottom_position - pagination_height;
+
+                    var second_top = top + height + bottom_position;
+                    var second_position = bottom_position;
+                    var third_position = 0;
+                    if ( scrolled < first_top ) {
+                        $pagination.css( { 'position': 'absolute', 'top': first_position, 'bottom': '', 'left': left_pos } );
+                    } else if ( scrolled < second_top ) {
+                        $pagination.css( { 'position': 'fixed', 'bottom': second_position, 'top': '', 'left': full_left_pos } );
+                    } else {
+                        $pagination.css( { 'position': 'absolute', 'bottom': third_position, 'top': '', 'left': left_pos } );
+                    }
+                });
             }
             bottom_style_set();
             jQuery(window).scroll(bottom_style_set);
+            jQuery(window).on('resize', bottom_style_set);
             jQuery(document).on("berocket_lmp_end berocket_ajax_filtering_end", bottom_style_set);
             <?php
         }
@@ -642,8 +655,19 @@ class BeRocket_Pagination extends BeRocket_Framework {
                     "name"      => array("general_settings", "use_dots"),
                     "value"     => '1',
                 ),
+                'show_page_summary' => array(
+                    'label' => __( 'Show page summary', 'pagination-styler-for-woocommerce' ),
+                    'type' => 'checkbox',
+                    'name' => array( 'general_settings', 'show_page_summary' ),
+                    'value' => '1',
+                    'label_for' => __( 'Display Page X of Y next to pagination, including when there is only one page.', 'pagination-styler-for-woocommerce' ),
+                ),
             ),
             'Style' => array(
+                'pagination_design' => array(
+                    'label' => '',
+                    'section' => 'design',
+                ),
                 'style' => array(
                     "label"    => __( 'Pagination style', "pagination-styler-for-woocommerce" ),
                     "name"     => array("style_settings", "style"),
@@ -744,7 +768,8 @@ class BeRocket_Pagination extends BeRocket_Framework {
                 ),
                 'style_section' => array(
                     "label"     => "",
-                    "section"   => 'style'
+                    "section"   => 'style',
+                    'tr_class'  => 'br-pagination-manual-styles',
                 ),
             ),
             'Text' => array(
@@ -857,6 +882,35 @@ class BeRocket_Pagination extends BeRocket_Framework {
             ),
         ) );
     }
+    public function section_design( $data, $options_global ) {
+        return BeRocket_Pagination_Presets::field( $options_global );
+    }
+
+    public function save_settings_callback( $settings ) {
+        if ( is_array( $settings ) && array_key_exists( 'pagination_design', $settings ) ) {
+            $saved = $this->get_option();
+            if ( ! isset( $settings['style_settings'] ) || ! is_array( $settings['style_settings'] ) ) {
+                $settings['style_settings'] = array();
+            }
+            // Retain visual fields omitted by the legacy form; explicit edits and
+            // empty resets still go through the native sanitizer below.
+            foreach ( array( 'ul_style', 'ul_li_style', 'ul_li_hover_style', 'ul_li_a-span_style', 'ul_li_a-span_hover_style', 'buttons' ) as $key ) {
+                $posted = $settings['style_settings'][$key] ?? array();
+                if ( is_array( $posted ) && isset( $saved['style_settings'][$key] ) && is_array( $saved['style_settings'][$key] ) ) {
+                    $settings['style_settings'][$key] = array_replace_recursive( $saved['style_settings'][$key], $posted );
+                }
+            }
+        }
+        return parent::save_settings_callback( $settings );
+    }
+
+    public function sanitize_option( $input ) {
+        if ( is_array( $input ) ) {
+            $input['pagination_design'] = BeRocket_Pagination_Presets::selected( $input );
+        }
+        return parent::sanitize_option( $input );
+    }
+
     public function section_style($data, $options_global) {
         ob_start();
         $options = br_get_value_from_array($options_global, 'style_settings');

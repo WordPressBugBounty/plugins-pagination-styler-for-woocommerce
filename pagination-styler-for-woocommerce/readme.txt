@@ -4,8 +4,8 @@ Contributors: berocket, dholovnia
 Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&utm_campaign=pagination
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 5.0
-Tested up to: 7.1
-Stable tag: 3.6.3
+Tested up to: 7.1.3
+Stable tag: 3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,8 @@ With Pagination Styler for WooCommerce You can customize pagination as You want 
 &#9989; Style Customization for Pagination
 &#9989; Cusom Color for Pagination Elements
 &#9989; Custom Horizontal Position for Pagination
+&#9989; Eleven ready-made pagination designs: Soft pills, Outline, High contrast, Rounded cards, Square blocks, Underline, Minimal, Elevated, Ocean, Forest and Warm sand
+&#9989; Optional Page X of Y summary next to pagination
 
 = Features in Version 3.5: =
 &#9989; Custom Position for next and previous buttons
@@ -60,6 +62,12 @@ Pagination Styler for WooCommerce will add a new sub-menu item called "Paginatio
 
 == Frequently Asked Questions ==
 
+= Can I use a ready-made pagination design without losing my custom styles? =
+Yes. Open the Pagination Styler settings, select the Style tab and choose a Pagination design. The preview updates immediately; save your settings to apply the design to your store. Manual/Default is the initial setting and restores your saved manual colours and borders. Position, button orientation and navigation settings remain independent of the selected design.
+
+= How do I display the current page and total number of pages? =
+Enable Show page summary on the General tab and save your settings. A localized Page X of Y label appears next to pagination in Manual/Default and the ready-made designs. It also shows Page 1 of 1 when there is only one page of products; empty product lists have no summary. Each paginated product loop uses its own current and total page counts, including filtered archives. This option is off by default and does not change pagination links or their text templates.
+
 = Is it compatible with all WordPress themes? =
 Compatibility with all themes is impossible, because they are too many, but generally if themes are developed according to WordPress and WooCommerce guidelines, BeRocket plugins are compatible with them.
 
@@ -83,7 +91,14 @@ If none of the previous listed actions helps you solve the problem, then, submit
 
 == Changelog ==
 
+= 3.7 =
+* Feature - Added ready-made pagination designs with live previews, including Rounded cards, Square blocks, Underline, Minimal, Elevated, Ocean, Forest and Warm sand.
+* Feature - Added an optional Page X of Y pagination summary.
+* Enhancement - Updated BeRocket Framework to 3.1.3 with CDN release metadata, reduced updater API traffic, isolated invalid catalog records, improved banner tracking, and an SVG account icon.
+* Enhancement - Updated compatibility declarations for WordPress 7.1.3 and WooCommerce 11.2.1.
+
 = 3.6.3 =
+* Enhancement - Add eight pagination designs with live previews: Rounded cards, Square blocks, Underline, Minimal, Elevated, Ocean, Forest and Warm sand. Preserve saved manual styles, navigation links, positioning and button orientation.
 * Enhancement - Updated BeRocket framework.
 * Security - Hardened framework validation and output handling.
 

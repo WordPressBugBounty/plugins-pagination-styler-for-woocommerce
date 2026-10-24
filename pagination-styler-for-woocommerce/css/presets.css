@@ -1,0 +1,180 @@
+/* Opt-in pagination only: never styles Manual/Default or unrelated theme links. */
+.woocommerce-pagination.berocket_pagination.br-pagination-preset {
+    --br-pag-bg: #eef2ff;
+    --br-pag-ink: #293d8a;
+    --br-pag-border: transparent;
+    --br-pag-active: #3348a5;
+    --br-pag-on-active: #fff;
+    --br-pag-hover: #dfe6ff;
+    --br-pag-focus: #3348a5;
+    --br-pag-radius: 24px;
+    --br-pag-shadow: none;
+    --br-pag-current-shadow: var(--br-pag-shadow);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--outline {
+    --br-pag-bg: #fff;
+    --br-pag-ink: #27364a;
+    --br-pag-border: #62748b;
+    --br-pag-active: #27364a;
+    --br-pag-hover: #eaf0f7;
+    --br-pag-focus: #27364a;
+    --br-pag-radius: 6px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--high-contrast {
+    --br-pag-bg: #171b22;
+    --br-pag-ink: #fff;
+    --br-pag-border: #171b22;
+    --br-pag-active: #ffe066;
+    --br-pag-on-active: #171b22;
+    --br-pag-hover: #354154;
+    --br-pag-focus: #171b22;
+    --br-pag-radius: 0px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--rounded-cards {
+    --br-pag-bg: #fff;
+    --br-pag-ink: #334155;
+    --br-pag-border: #cbd5e1;
+    --br-pag-active: #334155;
+    --br-pag-hover: #f1f5f9;
+    --br-pag-focus: #334155;
+    --br-pag-radius: 12px;
+    --br-pag-shadow: 0 1px 2px rgba(15, 23, 42, .12);
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--square-blocks {
+    --br-pag-bg: #e2e8f0;
+    --br-pag-ink: #1e293b;
+    --br-pag-active: #1e293b;
+    --br-pag-hover: #cbd5e1;
+    --br-pag-focus: #1e293b;
+    --br-pag-radius: 0px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--underline {
+    --br-pag-bg: #fff;
+    --br-pag-ink: #334155;
+    --br-pag-active: #fff;
+    --br-pag-on-active: #1d4ed8;
+    --br-pag-hover: #eff6ff;
+    --br-pag-focus: #1d4ed8;
+    --br-pag-radius: 0px;
+    --br-pag-shadow: inset 0 -2px 0 #cbd5e1;
+    --br-pag-current-shadow: inset 0 -3px 0 #1d4ed8;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--minimal {
+    --br-pag-bg: #fff;
+    --br-pag-ink: #475569;
+    --br-pag-active: #e2e8f0;
+    --br-pag-on-active: #0f172a;
+    --br-pag-hover: #f1f5f9;
+    --br-pag-focus: #475569;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--elevated {
+    --br-pag-bg: #fff;
+    --br-pag-ink: #4c1d95;
+    --br-pag-border: #ddd6fe;
+    --br-pag-active: #5b21b6;
+    --br-pag-hover: #f5f3ff;
+    --br-pag-focus: #5b21b6;
+    --br-pag-radius: 8px;
+    --br-pag-shadow: 0 2px 4px rgba(76, 29, 149, .2);
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--ocean {
+    --br-pag-bg: #e0f2fe;
+    --br-pag-ink: #075985;
+    --br-pag-border: #7dd3fc;
+    --br-pag-active: #075985;
+    --br-pag-hover: #bae6fd;
+    --br-pag-focus: #075985;
+    --br-pag-radius: 10px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--forest {
+    --br-pag-bg: #ecfdf5;
+    --br-pag-ink: #065f46;
+    --br-pag-border: #6ee7b7;
+    --br-pag-active: #065f46;
+    --br-pag-hover: #d1fae5;
+    --br-pag-focus: #065f46;
+    --br-pag-radius: 8px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--warm-sand {
+    --br-pag-bg: #fffbeb;
+    --br-pag-ink: #78350f;
+    --br-pag-border: #d6b889;
+    --br-pag-active: #92400e;
+    --br-pag-hover: #fef3c7;
+    --br-pag-focus: #92400e;
+    --br-pag-radius: 18px;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers {
+    display: inline-flex !important;
+    flex-wrap: wrap;
+    justify-content: inherit;
+    gap: 6px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 4px !important;
+    border: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    list-style: none !important;
+    overflow: visible !important;
+    vertical-align: middle;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--vertical ul.page-numbers { flex-direction: column; }
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li {
+    display: block !important;
+    float: none !important;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > a,
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > span {
+    display: block !important;
+    box-sizing: border-box;
+    min-width: 36px;
+    padding: 9px 12px !important;
+    margin: 0 !important;
+    border: 1px solid var(--br-pag-border) !important;
+    border-radius: var(--br-pag-radius) !important;
+    background: var(--br-pag-bg) !important;
+    color: var(--br-pag-ink) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    box-shadow: var(--br-pag-shadow) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > a:hover {
+    background: var(--br-pag-hover) !important;
+    color: var(--br-pag-ink) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li.current > span {
+    background: var(--br-pag-active) !important;
+    color: var(--br-pag-on-active) !important;
+    border-color: var(--br-pag-active) !important;
+    box-shadow: var(--br-pag-current-shadow) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li.dots > span {
+    color: var(--br-pag-ink) !important;
+    border-color: transparent !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > a:focus-visible {
+    outline: 2px solid var(--br-pag-focus) !important;
+    outline-offset: 2px;
+}
+.br-pagination-design-field > select { min-width: 190px; }
+#br-pagination-design-preview { margin-top: 16px; max-width: 700px; }
+#br-pagination-design-preview[hidden] { display: none !important; }
+#br-pagination-design-preview nav { pointer-events: none; text-align: start; }

@@ -55,3 +55,28 @@ html .woocommerce-pagination.berocket_pagination ul li a.prev:after,
 html .woocommerce-pagination.berocket_pagination ul li a.next:after {
 
 }
+.woocommerce-pagination.berocket_pagination.br-pagination-with-summary .br-pagination-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    max-width: 100%;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-with-summary .br-pagination-content > ul.page-numbers {
+    max-width: 100%;
+    box-sizing: border-box;
+    flex: 0 1 auto;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-with-summary .br-pagination-page-summary {
+    display: block;
+    max-width: 100%;
+    margin: 0;
+    padding: 4px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

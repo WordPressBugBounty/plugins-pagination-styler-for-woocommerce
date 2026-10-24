@@ -1,5 +1,19 @@
 (function ($){
     $(document).ready( function () {
+        function paginationDesign() {
+            var design = $('#br-pagination-design').val();
+            if (!design) { return; }
+            var manual = design === 'manual';
+            $('.br-pagination-manual-styles').toggle(manual);
+            $('#br-pagination-design-preview').prop('hidden', manual);
+            if (!manual) {
+                $('#br-pagination-design-preview nav').attr('class',
+                    'woocommerce-pagination berocket_pagination br-pagination-preset br-pagination-preset--' + design);
+            }
+        }
+        $('#br-pagination-design').on('change', paginationDesign);
+        $('#br-pagination-design-preview').on('click', 'a', function(event) { event.preventDefault(); });
+        paginationDesign();
         function block_changer( input_class ) {
             if ( $( '.'+input_class ).is('[type=checkbox]') ) {
                 $( '.'+input_class ).change( function () {

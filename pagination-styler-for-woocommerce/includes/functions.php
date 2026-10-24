@@ -13,15 +13,19 @@ function berocket_pagination() {
     $url_parts    = explode( '?', $pagenum_link );
 
     if( function_exists('wc_get_loop_prop') ) {
-        $total   = wc_get_loop_prop( 'total_pages' );
+        // A single explicitly selected product can have max_num_pages = 0,
+        // even though this paginated loop has a result and therefore one page.
+        $total   = max( 1, (int) wc_get_loop_prop( 'total_pages' ) );
         $current = wc_get_loop_prop( 'current_page' );
     } else {
         $total   = isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
         $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
     }
+    $show_summary = ! empty( $options['show_page_summary'] ) && (int) $total > 0;
     ?>
-    <nav class="woocommerce-pagination berocket_pagination">
+    <nav class="woocommerce-pagination berocket_pagination<?php echo esc_attr( BeRocket_Pagination_Presets::classes( $options_global ) . ( $show_summary ? ' br-pagination-with-summary' : '' ) ); ?>">
     <?php
+    if ( $show_summary ) { echo '<div class="br-pagination-content">'; }
     if( $total > 1 ) {
 
     $pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
@@ -82,10 +86,12 @@ function berocket_pagination() {
     }
 
     $total = (int) $args['total'];
+    $current = (int) $args['current'];
     if ( $total < 2 ) {
+        if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total ) . '</div>'; }
+        echo '</nav>';
         return;
     }
-    $current  = (int) $args['current'];
     $end_size = (int) $args['end_size']; // Out of bounds?  Make it the default.
     if ( $end_size < 0 ) {
         $end_size = 0;
@@ -187,6 +193,7 @@ function berocket_pagination() {
     echo $r;
     do_action( 'berocket_ps_after_pagination' );
     }
+    if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total ) . '</div>'; }
     ?>
     </nav>
     <?php
@@ -195,4 +202,14 @@ function berocket_replace_data_pagination ( $text, $page, $lastpage ) {
     $text = str_replace( '%PAGE%', $page, $text );
     $text = str_replace( '%LAST%', $lastpage, $text );
     return $text;
+}
+
+/** A separate localized label, never a replacement for page-link tokens. */
+function berocket_pagination_page_summary( $current, $total ) {
+    $total = max( 0, (int) $total );
+    if ( ! $total ) { return ''; }
+    $current = max( 1, min( $total, (int) $current ) );
+    /* translators: 1: current page number, 2: total number of pages. */
+    $text = sprintf( __( 'Page %1$s of %2$s', 'pagination-styler-for-woocommerce' ), number_format_i18n( $current ), number_format_i18n( $total ) );
+    return '<span class="br-pagination-page-summary">' . esc_html( $text ) . '</span>';
 }

@@ -382,3 +382,35 @@ msgstr ""
 #: main.php:571
 msgid "Vertical"
 msgstr ""
+
+#: includes/presets.php:11
+msgid "Rounded cards"
+msgstr ""
+
+#: includes/presets.php:12
+msgid "Square blocks"
+msgstr ""
+
+#: includes/presets.php:13
+msgid "Underline"
+msgstr ""
+
+#: includes/presets.php:14
+msgid "Minimal"
+msgstr ""
+
+#: includes/presets.php:15
+msgid "Elevated"
+msgstr ""
+
+#: includes/presets.php:16
+msgid "Ocean"
+msgstr ""
+
+#: includes/presets.php:17
+msgid "Forest"
+msgstr ""
+
+#: includes/presets.php:18
+msgid "Warm sand"
+msgstr ""
