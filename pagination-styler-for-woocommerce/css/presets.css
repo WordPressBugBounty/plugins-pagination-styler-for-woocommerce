@@ -9,7 +9,6 @@
     --br-pag-focus: #3348a5;
     --br-pag-radius: 24px;
     --br-pag-shadow: none;
-    --br-pag-current-shadow: var(--br-pag-shadow);
     max-width: 100%;
     box-sizing: border-box;
 }
@@ -58,8 +57,6 @@
     --br-pag-hover: #eff6ff;
     --br-pag-focus: #1d4ed8;
     --br-pag-radius: 0px;
-    --br-pag-shadow: inset 0 -2px 0 #cbd5e1;
-    --br-pag-current-shadow: inset 0 -3px 0 #1d4ed8;
 }
 .woocommerce-pagination.berocket_pagination.br-pagination-preset--minimal {
     --br-pag-bg: #fff;
@@ -136,6 +133,12 @@
     padding: 0 !important;
     overflow: visible !important;
 }
+.woocommerce-pagination.berocket_pagination.br-pagination-preset.br-pagination-arrow-gap:not(.br-pagination-arrow-gap--vertical) ul.page-numbers li:is(.other, .current) + li:is(.prev, .next) {
+    margin-inline-start: var(--br-pagination-arrow-gap) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset.br-pagination-arrow-gap:not(.br-pagination-arrow-gap--vertical) ul.page-numbers li:is(.prev, .next):has(+ li:is(.other, .current)) {
+    margin-inline-end: var(--br-pagination-arrow-gap) !important;
+}
 .woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > a,
 .woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > span {
     display: block !important;
@@ -164,13 +167,16 @@
     background: var(--br-pag-active) !important;
     color: var(--br-pag-on-active) !important;
     border-color: var(--br-pag-active) !important;
-    box-shadow: var(--br-pag-current-shadow) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-preset--underline ul.page-numbers li.current > span {
+    text-decoration: underline 2px !important;
+    text-underline-offset: .22em;
 }
 .woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li.dots > span {
     color: var(--br-pag-ink) !important;
     border-color: transparent !important;
 }
-.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > a:focus-visible {
+.woocommerce-pagination.berocket_pagination.br-pagination-preset ul.page-numbers li > :is(a, span[tabindex]):focus-visible {
     outline: 2px solid var(--br-pag-focus) !important;
     outline-offset: 2px;
 }

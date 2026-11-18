@@ -1,5 +1,7 @@
 (function ($){
     $(document).ready( function () {
+        var $arrowGap = $('#br-pagination-arrow-gap');
+        var $orientation = $('[name="br-pagination-options[style_settings][ul_li_style][float]"]');
         function paginationDesign() {
             var design = $('#br-pagination-design').val();
             if (!design) { return; }
@@ -7,11 +9,20 @@
             $('.br-pagination-manual-styles').toggle(manual);
             $('#br-pagination-design-preview').prop('hidden', manual);
             if (!manual) {
-                $('#br-pagination-design-preview nav').attr('class',
-                    'woocommerce-pagination berocket_pagination br-pagination-preset br-pagination-preset--' + design);
+                var gap = $arrowGap.val();
+                var hasGap = /^[0-9]+$/.test(gap) && gap > 0 && gap <= 64;
+                var vertical = $orientation.val() === 'none';
+                var $preview = $('#br-pagination-design-preview nav');
+                $preview.attr('class', 'woocommerce-pagination berocket_pagination br-pagination-preset br-pagination-preset--' + design)
+                    .toggleClass('br-pagination-preset--vertical', vertical)
+                    .toggleClass('br-pagination-arrow-gap', hasGap)
+                    .toggleClass('br-pagination-arrow-gap--vertical', hasGap && vertical);
+                $preview[0].style.setProperty('--br-pagination-arrow-gap', hasGap ? gap + 'px' : '');
             }
         }
         $('#br-pagination-design').on('change', paginationDesign);
+        $arrowGap.on('input', paginationDesign);
+        $orientation.on('change', paginationDesign);
         $('#br-pagination-design-preview').on('click', 'a', function(event) { event.preventDefault(); });
         paginationDesign();
         function block_changer( input_class ) {

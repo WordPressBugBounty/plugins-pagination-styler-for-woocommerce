@@ -1,18 +1,25 @@
 <?php
-function berocket_pagination() {
+function berocket_pagination( $pagination_args = array() ) {
     global $wp_query, $wp_rewrite;
-    
-    if ( function_exists('wc_get_loop_prop') && ( ! wc_get_loop_prop( 'is_paginated' ) || ! woocommerce_products_will_display() ) ) {
+    $pagination_args = is_array( $pagination_args ) ? $pagination_args : array();
+    $BeRocket_Pagination = BeRocket_Pagination::getInstance();
+    if ( empty( $pagination_args ) && ! empty( $BeRocket_Pagination->block_pagination_loop ) ) {
         return;
     }
-    $BeRocket_Pagination = BeRocket_Pagination::getInstance();
+    
+    if ( empty( $pagination_args ) && function_exists('wc_get_loop_prop') && ( ! wc_get_loop_prop( 'is_paginated' ) || ! woocommerce_products_will_display() ) ) {
+        return;
+    }
     $options_global = $BeRocket_Pagination->get_option();
     $options = $options_global['general_settings'];
 
     $pagenum_link = html_entity_decode( get_pagenum_link() );
     $url_parts    = explode( '?', $pagenum_link );
 
-    if( function_exists('wc_get_loop_prop') ) {
+    if ( ! empty( $pagination_args ) ) {
+        $total = $pagination_args['total'];
+        $current = $pagination_args['current'];
+    } elseif( function_exists('wc_get_loop_prop') ) {
         // A single explicitly selected product can have max_num_pages = 0,
         // even though this paginated loop has a result and therefore one page.
         $total   = max( 1, (int) wc_get_loop_prop( 'total_pages' ) );
@@ -22,8 +29,18 @@ function berocket_pagination() {
         $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
     }
     $show_summary = ! empty( $options['show_page_summary'] ) && (int) $total > 0;
+    $summary_format = $options['page_summary_format'] ?? 'long';
+    $classes = BeRocket_Pagination_Presets::classes( $options_global );
+    $current_tabindex = 'underline' === BeRocket_Pagination_Presets::selected( $options_global ) ? ' tabindex="0"' : '';
+    $arrow_gap = berocket_pagination_arrow_gap( $options_global['style_settings']['arrow_gap'] ?? 0 );
+    if ( $arrow_gap ) {
+        $classes .= ' br-pagination-arrow-gap';
+        if ( 'none' === ( $options_global['style_settings']['ul_li_style']['float'] ?? 'left' ) ) {
+            $classes .= ' br-pagination-arrow-gap--vertical';
+        }
+    }
     ?>
-    <nav class="woocommerce-pagination berocket_pagination<?php echo esc_attr( BeRocket_Pagination_Presets::classes( $options_global ) . ( $show_summary ? ' br-pagination-with-summary' : '' ) ); ?>">
+    <nav class="woocommerce-pagination berocket_pagination<?php echo esc_attr( $classes . ( $show_summary ? ' br-pagination-with-summary' : '' ) ); ?>"<?php if ( $arrow_gap ) { ?> style="--br-pagination-arrow-gap: <?php echo (int) $arrow_gap; ?>px"<?php } ?>>
     <?php
     if ( $show_summary ) { echo '<div class="br-pagination-content">'; }
     if( $total > 1 ) {
@@ -57,7 +74,9 @@ function berocket_pagination() {
         'after_page_number'     => ''
     ) );
 
-    if( function_exists('wc_get_loop_prop') ) {
+    if ( ! empty( $pagination_args ) ) {
+        $args = array_merge( $args, $pagination_args );
+    } elseif( function_exists('wc_get_loop_prop') ) {
         if ( wc_get_loop_prop( 'is_shortcode' ) ) {
             $args['base']   = esc_url_raw( add_query_arg( 'product-page', '%#%', false ) );
             $args['format'] = '?product-page = %#%';
@@ -71,7 +90,7 @@ function berocket_pagination() {
         $args['add_args'] = array();
     }
 
-    if ( isset( $url_parts[1] ) ) {
+    if ( empty( $pagination_args ) && isset( $url_parts[1] ) ) {
         $format = explode( '?', str_replace( '%_%', $args['format'], $args['base'] ) );
         $format_query = isset( $format[1] ) ? $format[1] : '';
         wp_parse_str( $format_query, $format_args );
@@ -88,7 +107,7 @@ function berocket_pagination() {
     $total = (int) $args['total'];
     $current = (int) $args['current'];
     if ( $total < 2 ) {
-        if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total ) . '</div>'; }
+        if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total, $summary_format ) . '</div>'; }
         echo '</nav>';
         return;
     }
@@ -140,7 +159,7 @@ function berocket_pagination() {
             if ( $args['prev_next'] && $current && 1 < $current && $options['pos_next_prev'] == 'around_current' ) :
                 $page_links[] = $page_before;
             endif;
-            $page_links[] = "<li class='current'><span class='page-numbers current'>" . $args['before_page_number'] . $current_n . $args['after_page_number'] . "</span></li>";
+            $page_links[] = "<li class='current'><span class='page-numbers current' aria-current='page'" . $current_tabindex . '>' . $args['before_page_number'] . $current_n . $args['after_page_number'] . "</span></li>";
             $dots = true;
             $next_dots = true;
             if ( $args['prev_next'] && $current && ( $current < $total || -1 == $total ) && $options['pos_next_prev'] == 'around_current' ) :
@@ -161,7 +180,8 @@ function berocket_pagination() {
                     $link = add_query_arg( $add_args, $link );
                     $link .= $args['add_fragment'];
 
-                    $page_links[] = "<li class='other'><a class='page-numbers' href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>" . $args['before_page_number'] . $current_n . $args['after_page_number'] . "</a></li>";
+                    $page_label = empty( $pagination_args ) ? '' : ' aria-label="' . esc_attr( sprintf( __( 'Page %s', 'pagination-styler-for-woocommerce' ), number_format_i18n( $n ) ) ) . '"';
+                    $page_links[] = "<li class='other'><a class='page-numbers'" . $page_label . " href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>" . $args['before_page_number'] . $current_n . $args['after_page_number'] . "</a></li>";
                     $dots = true;
                 elseif ( $dots && ! $args['show_all'] ) :
                 if ( ! $start && $args['prev_next'] && $current && ( $current < $total || -1 == $total ) && $options['pos_next_prev'] == 'around_central' ) :
@@ -193,7 +213,7 @@ function berocket_pagination() {
     echo $r;
     do_action( 'berocket_ps_after_pagination' );
     }
-    if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total ) . '</div>'; }
+    if ( $show_summary ) { echo berocket_pagination_page_summary( $current, $total, $summary_format ) . '</div>'; }
     ?>
     </nav>
     <?php
@@ -204,12 +224,30 @@ function berocket_replace_data_pagination ( $text, $page, $lastpage ) {
     return $text;
 }
 
+function berocket_pagination_arrow_gap( $value ) {
+    if ( ! is_int( $value ) && ! ( is_string( $value ) && preg_match( '/\A[0-9]+\z/', $value ) ) ) {
+        return 0;
+    }
+    $gap = (int) $value;
+    return $gap >= 0 && $gap <= 64 ? $gap : 0;
+}
+
+function berocket_pagination_summary_format( $value ) {
+    return 'short' === $value ? 'short' : 'long';
+}
+
 /** A separate localized label, never a replacement for page-link tokens. */
-function berocket_pagination_page_summary( $current, $total ) {
+function berocket_pagination_page_summary( $current, $total, $format = 'long' ) {
     $total = max( 0, (int) $total );
     if ( ! $total ) { return ''; }
     $current = max( 1, min( $total, (int) $current ) );
-    /* translators: 1: current page number, 2: total number of pages. */
-    $text = sprintf( __( 'Page %1$s of %2$s', 'pagination-styler-for-woocommerce' ), number_format_i18n( $current ), number_format_i18n( $total ) );
+    if ( 'short' === berocket_pagination_summary_format( $format ) ) {
+        /* translators: 1: current page number, 2: total number of pages. */
+        $label = __( '%1$s / %2$s', 'pagination-styler-for-woocommerce' );
+    } else {
+        /* translators: 1: current page number, 2: total number of pages. */
+        $label = __( 'Page %1$s of %2$s', 'pagination-styler-for-woocommerce' );
+    }
+    $text = sprintf( $label, number_format_i18n( $current ), number_format_i18n( $total ) );
     return '<span class="br-pagination-page-summary">' . esc_html( $text ) . '</span>';
 }

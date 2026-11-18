@@ -27,6 +27,18 @@
     margin-right: 0!important;
     margin-bottom: 0!important;
 }
+.woocommerce-pagination.berocket_pagination.br-pagination-arrow-gap:not(.br-pagination-preset, .br-pagination-arrow-gap--vertical) ul.page-numbers li:is(.other, .current) + li:is(.prev, .next) {
+    margin-left: var(--br-pagination-arrow-gap) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-arrow-gap:not(.br-pagination-preset, .br-pagination-arrow-gap--vertical) ul.page-numbers li:is(.prev, .next):has(+ li:is(.other, .current)) {
+    margin-right: var(--br-pagination-arrow-gap) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-arrow-gap--vertical ul.page-numbers li:is(.other, .current) + li:is(.prev, .next) {
+    margin-top: var(--br-pagination-arrow-gap) !important;
+}
+.woocommerce-pagination.berocket_pagination.br-pagination-arrow-gap--vertical ul.page-numbers li:is(.prev, .next):has(+ li:is(.other, .current)) {
+    margin-bottom: var(--br-pagination-arrow-gap) !important;
+}
 .woocommerce-pagination.berocket_pagination ul li a,
 .woocommerce-pagination.berocket_pagination ul li span {
     margin: 0!important;

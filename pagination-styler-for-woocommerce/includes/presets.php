@@ -10,7 +10,7 @@ class BeRocket_Pagination_Presets {
             'high-contrast' => __( 'High contrast', 'pagination-styler-for-woocommerce' ),
             'rounded-cards' => __( 'Rounded cards', 'pagination-styler-for-woocommerce' ),
             'square-blocks' => __( 'Square blocks', 'pagination-styler-for-woocommerce' ),
-            'underline' => __( 'Underline', 'pagination-styler-for-woocommerce' ),
+            'underline' => __( 'Underlined numbers', 'pagination-styler-for-woocommerce' ),
             'minimal' => __( 'Minimal', 'pagination-styler-for-woocommerce' ),
             'elevated' => __( 'Elevated', 'pagination-styler-for-woocommerce' ),
             'ocean' => __( 'Ocean', 'pagination-styler-for-woocommerce' ),
@@ -57,7 +57,7 @@ class BeRocket_Pagination_Presets {
                     <ul class="page-numbers">
                         <li class="prev"><a href="#" tabindex="-1"><?php esc_html_e( 'Previous', 'pagination-styler-for-woocommerce' ); ?></a></li>
                         <li class="other"><a href="#" tabindex="-1">1</a></li>
-                        <li class="current"><span class="page-numbers current">2</span></li>
+                        <li class="current"><span class="page-numbers current" aria-current="page">2</span></li>
                         <li class="other"><a href="#" tabindex="-1">3</a></li>
                         <li class="dots"><span class="page-numbers dots">…</span></li>
                         <li class="other"><a href="#" tabindex="-1">10</a></li>

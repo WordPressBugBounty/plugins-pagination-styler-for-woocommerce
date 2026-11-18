@@ -4,8 +4,8 @@ Contributors: berocket, dholovnia
 Donate link: https://berocket.com/?utm_source=wordpress_org&utm_medium=donate&utm_campaign=pagination
 Tags: woocommerce, pagination, design, style, customization
 Requires at least: 5.0
-Tested up to: 7.1.3
-Stable tag: 3.7
+Tested up to: 7.1.4
+Stable tag: 3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,6 +90,13 @@ If none of the previous listed actions helps you solve the problem, then, submit
 ---
 
 == Changelog ==
+
+= 3.8 =
+* Enhancement - Updated the Underlined numbers design with an underlined current page and visible keyboard focus.
+* Feature - Added a compact page summary format such as 2 / 5.
+* Feature - Added adjustable spacing between navigation arrows and page numbers in horizontal and vertical pagination.
+* Feature - Added pagination styling for WooCommerce Product Collection and product query blocks.
+* Enhancement - Updated BeRocket Framework to 3.1.5 to handle settings and support links when a premium product is not configured.
 
 = 3.7 =
 * Feature - Added ready-made pagination designs with live previews, including Rounded cards, Square blocks, Underline, Minimal, Elevated, Ocean, Forest and Warm sand.

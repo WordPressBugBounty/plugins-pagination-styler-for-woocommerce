@@ -392,7 +392,7 @@ msgid "Square blocks"
 msgstr ""
 
 #: includes/presets.php:13
-msgid "Underline"
+msgid "Underlined numbers"
 msgstr ""
 
 #: includes/presets.php:14
@@ -413,4 +413,44 @@ msgstr ""
 
 #: includes/presets.php:18
 msgid "Warm sand"
+msgstr ""
+
+#: main.php:661
+msgid "Show page summary"
+msgstr ""
+
+#: main.php:665
+msgid "Display the current and total page counts next to pagination, including when there is only one page."
+msgstr ""
+
+#: main.php:668
+msgid "Page summary format"
+msgstr ""
+
+#: main.php:673
+msgid "Page 2 of 5"
+msgstr ""
+
+#: main.php:674
+msgid "2 / 5"
+msgstr ""
+
+#. translators: 1: current page number, 2: total number of pages.
+#: includes/functions.php:236
+#, php-format
+msgid "%1$s / %2$s"
+msgstr ""
+
+#. translators: 1: current page number, 2: total number of pages.
+#: includes/functions.php:239
+#, php-format
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#: main.php:783
+msgid "Spacing between arrows and page numbers"
+msgstr ""
+
+#: main.php:789
+msgid "Pixels. Use 0 for the default spacing."
 msgstr ""

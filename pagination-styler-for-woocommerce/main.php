@@ -14,6 +14,8 @@ class BeRocket_Pagination extends BeRocket_Framework {
     public static $settings_name = 'br-pagination-options';
     protected $plugin_version_capability = 15;
     protected static $instance;
+    public $block_pagination_loop = false;
+    protected $block_pagination_loop_stack = array();
     public $import_export = array(
         'javascript_settings' => array(
             'page_load' => array(
@@ -73,9 +75,11 @@ class BeRocket_Pagination extends BeRocket_Framework {
                 'page_mid_size' => '3',
                 'use_dots' => '1',
                 'show_page_summary' => '',
+                'page_summary_format' => 'long',
             ),
             'style_settings' => array (
                 'style' => 'default',
+                'arrow_gap' => '0',
                 'use_styles' => array (),
                 'buttons' => array (
                     'prev' => array (
@@ -381,11 +385,99 @@ class BeRocket_Pagination extends BeRocket_Framework {
             add_action ( 'woocommerce_before_shop_loop', 'berocket_pagination', 80 );
         }
         add_filter ( 'woocommerce_pagination_args', array( $this, 'set_pagination_settings' ) );
+        // Run before WooCommerce adds Product Collection navigation directives (priority 10).
+        add_filter( 'render_block_core/query-pagination', array( $this, 'render_block_pagination' ), 5, 3 );
+        add_filter( 'render_block', array( $this, 'before_block_loop_hooks' ), 9, 2 );
+        add_filter( 'render_block', array( $this, 'after_block_loop_hooks' ), 11 );
+    }
+    public function before_block_loop_hooks( $content, $block ) {
+        $this->block_pagination_loop_stack[] = $this->block_pagination_loop;
+        // WooCommerce's archive compatibility layer invokes classic loop hooks at priority 10.
+        $this->block_pagination_loop = ! empty( $block['attrs']['isInherited'] )
+            && in_array( $block['blockName'], array( 'woocommerce/product-template', 'core/post-template' ), true );
+        return $content;
+    }
+    public function after_block_loop_hooks( $content ) {
+        $this->block_pagination_loop = array_pop( $this->block_pagination_loop_stack );
+        return $content;
+    }
+    public function render_block_pagination( $content, $block, $instance ) {
+        $query = isset( $instance->context['query'] ) ? $instance->context['query'] : array();
+        if ( empty( $content ) || ! class_exists( 'WP_HTML_Tag_Processor' )
+            || ( empty( $query['isProductCollectionBlock'] ) && ( ! isset( $query['postType'] ) || 'product' !== $query['postType'] ) ) ) {
+            return $content;
+        }
+        $wrapper = new WP_HTML_Tag_Processor( $content );
+        if ( ! $wrapper->next_tag( 'NAV' ) ) {
+            return $content;
+        }
+        global $wp_query;
+        $page_key = isset( $instance->context['queryId'] ) ? 'query-' . $instance->context['queryId'] . '-page' : 'query-page';
+        if ( ! empty( $query['inherit'] ) ) {
+            $current = max( 1, (int) get_query_var( 'paged' ) );
+            $total = (int) $wp_query->max_num_pages;
+            $base = str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) );
+        } else {
+            $current = isset( $_GET[ $page_key ] ) ? max( 1, (int) $_GET[ $page_key ] ) : 1;
+            $block_query = new WP_Query( build_query_vars_from_query_block( $instance, $current ) );
+            $total = (int) $block_query->max_num_pages;
+            // Keep other collections, filters and sorting; change only this collection's page.
+            $base = str_replace( 999999999, '%#%', add_query_arg( $page_key, 999999999, remove_query_arg( 'add-to-cart' ) ) );
+        }
+        if ( ! empty( $query['pages'] ) ) {
+            $total = min( $total, (int) $query['pages'] );
+        }
+        if ( $total < 2 ) {
+            return '';
+        }
+        ob_start();
+        berocket_pagination( array( 'total' => $total, 'current' => $current, 'base' => $base, 'format' => '', 'add_args' => array() ) );
+        $pagination = new WP_HTML_Tag_Processor( ob_get_clean() );
+        $pagination->next_tag( 'NAV' );
+        // Retain the block's anchor, styles and navigation attributes on our existing wrapper.
+        foreach ( $wrapper->get_attribute_names_with_prefix( '' ) as $attribute ) {
+            if ( 'class' !== $attribute ) {
+                $value = $wrapper->get_attribute( $attribute );
+                if ( 'style' === $attribute ) {
+                    $value = rtrim( (string) $value, ';' ) . ';' . $pagination->get_attribute( 'style' );
+                }
+                $pagination->set_attribute( $attribute, $value );
+            }
+        }
+        foreach ( preg_split( '/\s+/', (string) $wrapper->get_attribute( 'class' ) ) as $class ) {
+            if ( '' !== $class ) {
+                $pagination->add_class( $class );
+            }
+        }
+        $pagination->add_class( 'wp-block-query-pagination' );
+        $core_navigation = false;
+        while ( $wrapper->next_tag( 'A' ) ) {
+            if ( 'core/query::actions.navigate' === $wrapper->get_attribute( 'data-wp-on--click' ) ) {
+                $core_navigation = true;
+                break;
+            }
+        }
+        while ( $pagination->next_tag() ) {
+            if ( 'A' === $pagination->get_tag() ) {
+                if ( $pagination->has_class( 'prev' ) ) {
+                    $pagination->add_class( 'wp-block-query-pagination-previous' );
+                } elseif ( $pagination->has_class( 'next' ) ) {
+                    $pagination->add_class( 'wp-block-query-pagination-next' );
+                }
+                if ( $core_navigation ) {
+                    $pagination->set_attribute( 'data-wp-on--click', 'core/query::actions.navigate' );
+                    $pagination->set_attribute( 'data-wp-key', 'berocket-pagination-' . md5( $pagination->get_attribute( 'href' ) ) );
+                }
+            } elseif ( 'SPAN' === $pagination->get_tag() && $pagination->has_class( 'current' ) ) {
+                $pagination->set_attribute( 'aria-current', 'page' );
+            }
+        }
+        return $pagination->get_updated_html();
     }
     public function admin_init () {
         parent::admin_init();
         $this->update_from_not_framework();
-        wp_enqueue_script( 'berocket_pagination_admin_script', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ) );
+        wp_enqueue_script( 'berocket_pagination_admin_script', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), BeRocket_pagination_version );
         wp_register_style( 'berocket_pagination_admin_style', plugins_url( 'css/admin.css', __FILE__ ), "", BeRocket_pagination_version );
         wp_enqueue_style( 'berocket_pagination_admin_style' );
         BeRocket_Pagination_Presets::enqueue();
@@ -660,7 +752,18 @@ class BeRocket_Pagination extends BeRocket_Framework {
                     'type' => 'checkbox',
                     'name' => array( 'general_settings', 'show_page_summary' ),
                     'value' => '1',
-                    'label_for' => __( 'Display Page X of Y next to pagination, including when there is only one page.', 'pagination-styler-for-woocommerce' ),
+                    'label_for' => __( 'Display the current and total page counts next to pagination, including when there is only one page.', 'pagination-styler-for-woocommerce' ),
+                ),
+                'page_summary_format' => array(
+                    'label' => '<label for="br-pagination-summary-format">' . esc_html__( 'Page summary format', 'pagination-styler-for-woocommerce' ) . '</label>',
+                    'type' => 'selectbox',
+                    'name' => array( 'general_settings', 'page_summary_format' ),
+                    'extra' => 'id="br-pagination-summary-format"',
+                    'options' => array(
+                        array( 'value' => 'long', 'text' => __( 'Page 2 of 5', 'pagination-styler-for-woocommerce' ) ),
+                        array( 'value' => 'short', 'text' => __( '2 / 5', 'pagination-styler-for-woocommerce' ) ),
+                    ),
+                    'value' => 'long',
                 ),
             ),
             'Style' => array(
@@ -765,6 +868,15 @@ class BeRocket_Pagination extends BeRocket_Framework {
                         array('value' => 'none', 'text' => __('Vertical', 'pagination-styler-for-woocommerce')),
                     ),
                     "value"    => '',
+                ),
+                'arrow_gap' => array(
+                    'label' => '<label for="br-pagination-arrow-gap">' . esc_html__( 'Spacing between arrows and page numbers', 'pagination-styler-for-woocommerce' ) . '</label>',
+                    'type' => 'number',
+                    'name' => array( 'style_settings', 'arrow_gap' ),
+                    'class' => 'small-text',
+                    'extra' => 'id="br-pagination-arrow-gap" min="0" max="64" step="1"',
+                    'value' => '0',
+                    'label_for' => __( 'Pixels. Use 0 for the default spacing.', 'pagination-styler-for-woocommerce' ),
                 ),
                 'style_section' => array(
                     "label"     => "",
@@ -907,6 +1019,12 @@ class BeRocket_Pagination extends BeRocket_Framework {
     public function sanitize_option( $input ) {
         if ( is_array( $input ) ) {
             $input['pagination_design'] = BeRocket_Pagination_Presets::selected( $input );
+            if ( isset( $input['general_settings'] ) && is_array( $input['general_settings'] ) ) {
+                $input['general_settings']['page_summary_format'] = berocket_pagination_summary_format( $input['general_settings']['page_summary_format'] ?? '' );
+            }
+            if ( isset( $input['style_settings'] ) && is_array( $input['style_settings'] ) ) {
+                $input['style_settings']['arrow_gap'] = (string) berocket_pagination_arrow_gap( $input['style_settings']['arrow_gap'] ?? '' );
+            }
         }
         return parent::sanitize_option( $input );
     }
